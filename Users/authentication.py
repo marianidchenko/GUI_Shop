@@ -3,10 +3,10 @@ from tkinter import messagebox
 
 
 def log_in(username, password):
-    with open('Users/users.txt', 'r') as file:
+    with open('../Users/users.txt', 'r') as file:
         usernames = json.loads(file.read())
         if username in usernames:
-            with open('Users/credentials.txt', 'r') as password_file:
+            with open('../Users/credentials.txt', 'r') as password_file:
                 credentials = json.loads(password_file.read())
                 if password == credentials[username]:
                     pass # take to application
@@ -19,13 +19,13 @@ def log_in(username, password):
 
 def register_user(username, password, password_confirmation):
     try:
-        with open('Users/credentials.txt', 'r') as file:
+        with open('../Users/credentials.txt', 'r') as file:
             credentials = json.loads(file.read())
     except:
         credentials = {}
 
     try:
-        with open('Users/users.txt', 'r') as file:
+        with open('../Users/users.txt', 'r') as file:
             users = json.loads(file.read())
     except:
         users = []
@@ -34,9 +34,9 @@ def register_user(username, password, password_confirmation):
         if username not in credentials.keys():
             credentials[username] = password
             users.append(username)
-            with open('Users/credentials.txt', 'w') as file:
+            with open('../Users/credentials.txt', 'w') as file:
                 json.dump(credentials, file)
-            with open('Users/users.txt', 'w') as file:
+            with open('../Users/users.txt', 'w') as file:
                 json.dump(users, file)
             messagebox.showinfo(' ', 'Registered successfully!')
         else:
