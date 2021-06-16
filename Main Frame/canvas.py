@@ -32,25 +32,30 @@ def render_login_view():
 
 def render_register_view():
     clear_view()
+    # Name
+    Label(window, text='First and Last Name:').grid(column=0, row=0, padx=5, pady=5)
+    name = Entry(window, width=30)
+    name.grid(column=1, row=0, padx=5, pady=5)
     # Username Entry
-    Label(window, text="Username:").grid(column=0, row=0, padx=5, pady=5)
+    Label(window, text="Username:").grid(column=0, row=1, padx=5, pady=5)
     username = Entry(window, width=30)
-    username.grid(column=1, row=0, padx=5, pady=5)
+    username.grid(column=1, row=1, padx=5, pady=5)
     # Password Entry
-    Label(window, text='Password:').grid(column=0, row=1, padx=5, pady=5)
+    Label(window, text='Password:').grid(column=0, row=2, padx=5, pady=5)
     password = Entry(window, width=30, show='*')
-    password.grid(column=1, row=1, padx=5, pady=5)
+    password.grid(column=1, row=2, padx=5, pady=5)
     # Password confirmation
-    Label(window, text='Confirm Password:').grid(column=0, row=2, padx=5, pady=5)
+    Label(window, text='Confirm Password:').grid(column=0, row=3, padx=5, pady=5)
     password_confirmation = Entry(window, width=30, show='*')
-    password_confirmation.grid(column=1, row=2, padx=5, pady=5)
+    password_confirmation.grid(column=1, row=3, padx=5, pady=5)
     # Register Button
     register_button = Button(window, text='Register',
-                             command=lambda: register_user(username.get(), password.get(), password_confirmation.get()))
-    register_button.grid(column=1, row=3, padx=5, pady=5)
+                             command=lambda: register_user(username.get(), password.get(), password_confirmation.get(),
+                                                           name.get()))
+    register_button.grid(column=1, row=5, padx=5, pady=5)
     # Login Button
     login_button = Button(window, text='Login', command=lambda: render_login_view())
-    login_button.grid(column=0, row=3, padx=5, pady=5)
+    login_button.grid(column=0, row=5, padx=5, pady=5)
 
 
 if __name__ == '__main__':
