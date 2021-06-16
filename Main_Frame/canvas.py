@@ -1,6 +1,8 @@
+import ast
+import tkinter
 from tkinter import *
 from Users.authentication import *
-
+from PIL import Image, ImageTk
 
 def clear_view():
     for slave in window.grid_slaves():
@@ -58,10 +60,23 @@ def render_register_view():
     login_button.grid(column=0, row=5, padx=5, pady=5)
 
 
+def shop_view():
+    clear_view()
+    # items
+    with open('inventory.py') as file:
+        for index, contents in enumerate(file.read().splitlines()):
+            item = ast.literal_eval(contents)
+            Label(window, text=f"{item['name']}").grid(column=index, row=0, padx=5, pady=2)
+            image = Image.open(f"{item['image_path']}")
+            photo = ImageTk.PhotoImage(image)
+            img_label = Label(image=photo)
+            img_label.image = photo
+            img_label.grid(column=index, row=1, padx=5, pady=2)
+
 if __name__ == '__main__':
     window = Tk()
     window.title('GUI Shop')
     window.geometry("800x600")  # window size
-    login_or_register()
+    shop_view()
     window.mainloop()
 
