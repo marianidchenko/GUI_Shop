@@ -1,1 +1,1 @@
-{"admin": "Admin Admin", "mnid": "Maria Nidchenko", "Drugs": "Pablo Escobar", "Mangoose": "Vasko Vaskov"}
+{"admin": "Admin Admin"}

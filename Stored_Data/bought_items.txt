@@ -1,1 +1,1 @@
-{"admin": {"dog": 2}, "mnid": {"testitem2": 7, "testitem?": 4, "testitem1": 1}, "Drugs": {"dog": 1}, "Mangoose": {}}
+{"admin": {"dog": 2}}

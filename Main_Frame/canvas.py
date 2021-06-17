@@ -50,9 +50,14 @@ def render_login_view():
     back_button.configure(height=1, width=8)
     back_button.grid(column=0, row=2, padx=5, pady=5)
 
+    forgot = Button(window, text='Forgot Password?', bg="gray32", fg="white", font=('impact', 11),
+                    command=lambda: forgot_password(username.get()))
+    forgot.configure(height=1, width=18)
+    forgot.grid(column=2, row=2, padx=5, pady=5)
+
     Label(window, text='Try the admin powers:\n'
                        'Username: admin\n'
-                       'Password: adminpass1', background='grey56', font='Arial, 12').grid(column=2, row=3, padx=140, pady=320)
+                       'Password: adminpass1', background='grey56', font='Arial, 12').grid(column=3, row=3, padx=10, pady=370)
 
 
 def render_register_view():
@@ -257,6 +262,16 @@ def item_add_view():
                          command=lambda: shop_view())
     back_button.grid(column=0, row=4, padx=5, pady=5)
     back_button.configure(height=1, width=8)
+
+
+def forgot_password(username):
+    if username == '':
+        messagebox.showinfo(' ', 'Type in your username at least, man.')
+    else:
+        with open('../Stored_Data/credentials.txt', 'r') as file:
+            user_credentials = json.loads(file.read())
+            password = user_credentials[username]
+        messagebox.showinfo('Pretend this is your phone', f"Blunt hint, it's: {password}")
 
 
 def log_in(username, password):
