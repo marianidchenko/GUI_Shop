@@ -19,59 +19,76 @@ def clear_view():
 
 def login_or_register():
     clear_view()
-    login = Button(window, text='Login', command=lambda: render_login_view())
-    login.grid(column=0, row=0, padx=5, pady=5)
-    register = Button(window, text='Register', command=lambda: render_register_view())
-    register.grid(column=1, row=0, padx=5, pady=5)
+    login = Button(window, text='Login', bg="gray32", fg="white", font=('impact', 13),
+                   command=lambda: render_login_view())
+    login.config(height=2, width=10)
+    login.grid(column=1, row=1, padx=10, pady=10)
+    register = Button(window, text='Register', bg="gray32", fg="white", font=('impact', 13),
+                      command=lambda: render_register_view())
+    register.configure(height=2, width=10)
+    register.grid(column=2, row=1, padx=10, pady=10)
 
 
 def render_login_view():
     clear_view()
     # Username Entry
-    Label(window, text="Username:").grid(column=0, row=0, padx=5, pady=5)
-    username = Entry(window, width=30)
+    Label(window, text="Username:", bg="dark grey", fg="black", font=('impact', 11)).grid(column=0, row=0,
+                                                                                          padx=5, pady=5)
+    username = Entry(window, width=30, font='Arial, 12')
     username.grid(column=1, row=0, padx=5, pady=5)
     # Password Entry
-    Label(window, text='Password:').grid(column=0, row=1, padx=5, pady=5)
-    password = Entry(window, width=30, show='*')
+    Label(window, text='Password:', bg="dark grey", fg="black", font=('impact', 11)).grid(column=0, row=1,
+                                                                                          padx=5, pady=5)
+    password = Entry(window, width=30, show='*', font='Arial, 12')
     password.grid(column=1, row=1, padx=5, pady=5)
     # Login Button
-    login_button = Button(window, text='Login', command=lambda: log_in(username.get(), password.get()))
+    login_button = Button(window, text='Login', bg="gray32", fg="white", font=('impact', 11),
+                          command=lambda: log_in(username.get(), password.get()))
+    login_button.configure(height=1, width=8)
     login_button.grid(column=1, row=2, padx=5, pady=5)
-    back_button = Button(window, text='Back', command=lambda: login_or_register())
+    back_button = Button(window, text='Back', bg="gray32", fg="white", font=('impact', 11),
+                         command=lambda: login_or_register())
+    back_button.configure(height=1, width=8)
     back_button.grid(column=0, row=2, padx=5, pady=5)
 
     Label(window, text='Try the admin powers:\n'
                        'Username: admin\n'
-                       'Password: adminpass1').grid(column=2, row=3, padx=250, pady=370)
+                       'Password: adminpass1', background='grey56', font='Arial, 12').grid(column=2, row=3, padx=140, pady=320)
 
 
 def render_register_view():
     clear_view()
     # Name
-    Label(window, text='First and Last Name:').grid(column=0, row=0, padx=5, pady=5)
-    name = Entry(window, width=30)
+    Label(window, text='First and Last Name:', bg="dark grey", fg="black", font=('impact', 11)
+          ).grid(column=0, row=0, padx=5, pady=5)
+    name = Entry(window, width=30, font='Arial, 12')
     name.grid(column=1, row=0, padx=5, pady=5)
     # Username Entry
-    Label(window, text="Username:").grid(column=0, row=1, padx=5, pady=5)
-    username = Entry(window, width=30)
+    Label(window, text="Username:", bg="dark grey", fg="black", font=('impact', 11)
+          ).grid(column=0, row=1, padx=5, pady=5)
+    username = Entry(window, width=30, font='Arial, 12')
     username.grid(column=1, row=1, padx=5, pady=5)
     # Password Entry
-    Label(window, text='Password:').grid(column=0, row=2, padx=5, pady=5)
-    password = Entry(window, width=30, show='*')
+    Label(window, text='Password:', bg="dark grey", fg="black", font=('impact', 11)
+          ).grid(column=0, row=2, padx=5, pady=5)
+    password = Entry(window, width=30, show='*', font='Arial, 12')
     password.grid(column=1, row=2, padx=5, pady=5)
     # Password confirmation
-    Label(window, text='Confirm Password:').grid(column=0, row=3, padx=5, pady=5)
-    password_confirmation = Entry(window, width=30, show='*')
+    Label(window, text='Confirm Password:', bg="dark grey", fg="black", font=('impact', 11)
+          ).grid(column=0, row=3, padx=5, pady=5)
+    password_confirmation = Entry(window, width=30, show='*', font='Arial, 12')
     password_confirmation.grid(column=1, row=3, padx=5, pady=5)
     # Register Button
-    register_button = Button(window, text='Register',
+    register_button = Button(window, text='Register', bg="gray32", fg="white", font=('impact', 11),
                              command=lambda: register_user(username.get(), password.get(), password_confirmation.get(),
                                                            name.get()))
     register_button.grid(column=1, row=5, padx=5, pady=5)
+    register_button.configure(height=1, width=8)
     # Login Button
-    login_button = Button(window, text='Login', command=lambda: render_login_view())
+    login_button = Button(window, text='Login', bg="gray32", fg="white", font=('impact', 11),
+                          command=lambda: render_login_view())
     login_button.grid(column=0, row=5, padx=5, pady=5)
+    login_button.configure(height=1, width=8)
 
 
 def shop_view():
@@ -113,26 +130,34 @@ def shop_view():
         for index, contents in enumerate(file.read().splitlines()):
             index += 1
             item = ast.literal_eval(contents)
-            Label(window, text=f"{item['name']}").grid(column=index, row=0, padx=5, pady=2)
+            Label(window, text=f"{item['name']}", bg="dark grey", fg="black", font=('impact', 11)
+                  ).grid(column=index, row=0, padx=5, pady=5)
             image = Image.open(f"{item['image_path']}")
             photo = ImageTk.PhotoImage(image)
             img_label = Label(image=photo)
             img_label.image = photo
-            img_label.grid(column=index, row=1, padx=5, pady=2)
+            img_label.grid(column=index, row=1, padx=5, pady=5)
             if item['count'] == 0:
-                Label(window, text='OUT OF STOCK').grid(column=index, row=2, padx=5, pady=2)
+                Label(window, text='OUT OF STOCK', bg="dark grey", fg="black", font=('impact', 11)
+                      ).grid(column=index, row=2, padx=5, pady=5)
             else:
-                num = Button(window, text="Buy")
-                num.configure(command=lambda b=index: purchase_item(b))
-                num.grid(column=index, row=2, padx=5, pady=2)
+                num = Button(window, text="Buy", bg="gray32", fg="white", font=('impact', 11))
+                num.configure(command=lambda b=index: purchase_item(b), height=1, width=8)
+                num.grid(column=index, row=2, padx=5, pady=5)
+
             if current_user == 'admin':
-                Label(window, text=f"Index: {item['id']}").grid(column=index, row=3, padx=5, pady=2)
+                restock = Label(window, text=f"Index: {item['id']}", bg="dark grey", fg="black", font=('impact', 11))
+                restock.grid(column=index, row=3, padx=5, pady=5)
+                restock.configure(height=1, width=8)
     # Admin View:
     if current_user == 'admin':
-        Button(window, text='Restock', command=lambda: item_add_view()).grid(row=4, column=1, padx=5, pady=2)
+        restock = Button(window, text='Restock', command=lambda: item_restock_view(), bg="gray32", fg="white",
+                         font=('impact', 11))
+        restock.grid(row=4, column=1, padx=5, pady=5)
+        restock.configure(height=1, width=8)
 
 
-def item_add_view():
+def item_restock_view():
     clear_view()
 
     def restock(id, quantity):
@@ -150,18 +175,24 @@ def item_add_view():
                     newfile.write(str(line)+'\n')
         shop_view()
     # ID
-    Label(window, text='Item ID:').grid(column=0, row=0, padx=5, pady=5)
-    id = Entry(window, width=30)
+    Label(window, text='Item ID:', bg="dark grey", fg="black", font=('impact', 11)
+          ).grid(column=0, row=0, padx=5, pady=5)
+    id = Entry(window, width=30, font='Arial, 12')
     id.grid(column=1, row=0, padx=5, pady=5)
     # Name
-    Label(window, text="Add Quantity:").grid(column=0, row=1, padx=5, pady=5)
-    quantity = Entry(window, width=30)
+    Label(window, text="Add Quantity:", bg="dark grey", fg="black", font=('impact', 11)
+          ).grid(column=0, row=1, padx=5, pady=5)
+    quantity = Entry(window, width=30, font='Arial, 12')
     quantity.grid(column=1, row=1, padx=5, pady=5)
     # add button
-    add_button = Button(window, text='Restock', command=lambda: restock(id.get(), quantity.get()))
+    add_button = Button(window, text='Restock', bg="gray32", fg="white", font=('impact', 11),
+                        command=lambda: restock(id.get(), quantity.get()))
     add_button.grid(column=1, row=4, padx=5, pady=5)
-    back_button = Button(window, text='Back', command=lambda: shop_view())
+    add_button.configure(height=1, width=8)
+    back_button = Button(window, text='Back', bg="gray32", fg="white", font=('impact', 11),
+                         command=lambda: shop_view())
     back_button.grid(column=0, row=4, padx=5, pady=5)
+    back_button.configure(height=1, width=8)
 
 
 def log_in(username, password):
@@ -230,6 +261,7 @@ if __name__ == '__main__':
     window = Tk()
     window.title('GUI Shop')
     window.geometry("800x600")  # window size
+    window.configure(background='dark gray')
     login_or_register()
     window.mainloop()
 
