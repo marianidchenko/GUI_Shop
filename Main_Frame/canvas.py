@@ -1,9 +1,10 @@
 import ast
-from tkinter import *
 import json
-from PIL import Image, ImageTk
+from tkinter import *
 from tkinter import messagebox
-import re
+
+from PIL import Image, ImageTk
+
 password_requirements = r"^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"
 name_requirements = r'(?:[A-Z][a-z]+([ ])*){2,}'
 
