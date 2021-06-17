@@ -125,10 +125,11 @@ def shop_view():
                 num = Button(window, text="Buy")
                 num.configure(command=lambda b=index: purchase_item(b))
                 num.grid(column=index, row=2, padx=5, pady=2)
-
+            if current_user == 'admin':
+                Label(window, text=f"Index: {item['id']}").grid(column=index, row=3, padx=5, pady=2)
     # Admin View:
     if current_user == 'admin':
-        Button(window, text='Restock', command=lambda: item_add_view()).grid(row=3, column=1, padx=5, pady=2)
+        Button(window, text='Restock', command=lambda: item_add_view()).grid(row=4, column=1, padx=5, pady=2)
 
 
 def item_add_view():
@@ -147,6 +148,7 @@ def item_add_view():
             with open('inventory.py', 'a') as newfile:
                 for line in templines:
                     newfile.write(str(line)+'\n')
+        shop_view()
     # ID
     Label(window, text='Item ID:').grid(column=0, row=0, padx=5, pady=5)
     id = Entry(window, width=30)
