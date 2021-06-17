@@ -1,11 +1,9 @@
 import ast
-import tkinter
 from tkinter import *
 import json
 from PIL import Image, ImageTk
 from tkinter import messagebox
 import re
-import string
 password_requirements = r"^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"
 name_requirements = r'(?:[A-Z][a-z]+([ ])*){2,}'
 
@@ -122,7 +120,7 @@ def shop_view():
         carts[current_user] = cart
         with open('../Stored_Data/bought_items.txt', 'w') as record:
             json.dump(carts, record)
-        messagebox.showinfo(' ', 'Purchased successfully!')
+        messagebox.showinfo(' ', 'Added to cart successfully!')
         shop_view()
 
     # items
@@ -137,24 +135,39 @@ def shop_view():
             img_label = Label(image=photo)
             img_label.image = photo
             img_label.grid(column=index, row=1, padx=5, pady=5)
-            if item['count'] == 0:
+            if item['count'] <= 0:
                 Label(window, text='OUT OF STOCK', bg="dark grey", fg="black", font=('impact', 11)
                       ).grid(column=index, row=2, padx=5, pady=5)
             else:
-                num = Button(window, text="Buy", bg="gray32", fg="white", font=('impact', 11))
-                num.configure(command=lambda b=index: purchase_item(b), height=1, width=8)
+                num = Button(window, text="Add to cart", bg="gray32", fg="white", font=('impact', 11))
+                num.configure(command=lambda b=index: purchase_item(b), height=1, width=10)
                 num.grid(column=index, row=2, padx=5, pady=5)
 
             if current_user == 'admin':
                 restock = Label(window, text=f"Index: {item['id']}", bg="dark grey", fg="black", font=('impact', 11))
                 restock.grid(column=index, row=3, padx=5, pady=5)
                 restock.configure(height=1, width=8)
+
+    cart = Button(window, text='My Cart', command=lambda: view_cart(), bg="gray32", fg="white",
+                    font=('impact', 11))
+    cart.grid(row=4, column=3, padx=5, pady=5)
+    cart.configure(height=1, width=8)
+
+    logout = Button(window, text='Log Out', command=lambda: login_or_register(), bg="gray32", fg="white",
+                     font=('impact', 11))
+    logout.grid(row=4, column=4, padx=5, pady=5)
+    logout.configure(height=1, width=8)
     # Admin View:
     if current_user == 'admin':
         restock = Button(window, text='Restock', command=lambda: item_restock_view(), bg="gray32", fg="white",
                          font=('impact', 11))
         restock.grid(row=4, column=1, padx=5, pady=5)
         restock.configure(height=1, width=8)
+
+        add = Button(window, text='Add', command=lambda: item_add_view(), bg="gray32", fg="white",
+                     font=('impact', 11))
+        add.grid(row=4, column=2, padx=5, pady=5)
+        add.configure(height=1, width=8)
 
 
 def item_restock_view():
@@ -187,6 +200,56 @@ def item_restock_view():
     # add button
     add_button = Button(window, text='Restock', bg="gray32", fg="white", font=('impact', 11),
                         command=lambda: restock(id.get(), quantity.get()))
+    add_button.grid(column=1, row=4, padx=5, pady=5)
+    add_button.configure(height=1, width=8)
+    back_button = Button(window, text='Back', bg="gray32", fg="white", font=('impact', 11),
+                         command=lambda: shop_view())
+    back_button.grid(column=0, row=4, padx=5, pady=5)
+    back_button.configure(height=1, width=8)
+
+
+def item_add_view():
+    clear_view()
+
+    def add_item(id, name, path, count):
+        invalid = False
+        with open('inventory.py', 'r') as file:
+            for raw in file.read().splitlines():
+                item = ast.literal_eval(raw)
+                if item["id"] == int(id):
+                    messagebox.showinfo(' ', 'Item ID exists!')
+                    invalid = True
+                    break
+        if not invalid:
+            with open('inventory.py', 'a+') as file:
+                line = {"id": int(id), 'name': f"{name}", "image_path": f"{path}", "count": int(count)}
+                file.write(str(line) + '\n')
+                messagebox.showinfo(' ', 'Added successfully!')
+
+    # ID
+    Label(window, text='Item ID:', bg="dark grey", fg="black", font=('impact', 11)
+          ).grid(column=0, row=0, padx=5, pady=5)
+    id = Entry(window, width=30, font='Arial, 12')
+    id.grid(column=1, row=0, padx=5, pady=5)
+    # Name
+    Label(window, text='Name:', bg="dark grey", fg="black", font=('impact', 11)
+          ).grid(column=0, row=1, padx=5, pady=5)
+    name = Entry(window, width=30, font='Arial, 12')
+    name.grid(column=1, row=1, padx=5, pady=5)
+    # Image Path
+    Label(window, text='Image Path:', bg="dark grey", fg="black", font=('impact', 11)
+          ).grid(column=0, row=2, padx=5, pady=5)
+    path = Entry(window, width=30, font='Arial, 12')
+    path.grid(column=1, row=2, padx=5, pady=5)
+    # Quantity
+    Label(window, text="Quantity:", bg="dark grey", fg="black", font=('impact', 11)
+          ).grid(column=0, row=3, padx=5, pady=5)
+    quantity = Entry(window, width=30, font='Arial, 12')
+    quantity.grid(column=1, row=3, padx=5, pady=5)
+    # add button
+    add_button = Button(window, text='Add', bg="gray32", fg="white", font=('impact', 11),
+                        command=lambda: add_item(id.get(), name.get(),
+                                                 path.get(), quantity.get()))
     add_button.grid(column=1, row=4, padx=5, pady=5)
     add_button.configure(height=1, width=8)
     back_button = Button(window, text='Back', bg="gray32", fg="white", font=('impact', 11),
@@ -255,6 +318,88 @@ def register_user(username, password, password_confirmation, name):
     else:
         messagebox.showinfo(' ', 'First and last name should not contain digits or '
                                  'special characters and start with a capital letter.')
+
+
+def view_cart():
+    new_count_dict = {}
+    clear_view()
+    with open('../Stored_Data/bought_items.txt', 'r') as file:
+        dictionary = json.loads(file.read())
+        files = dictionary[current_user]
+    index = 0
+    for key, value in files.items():
+        Label(window, text=f" {key}:  ", bg="dark grey", fg="black", font=('impact', 13)
+              ).grid(row=index, column=0, padx=5, pady=5)
+        Label(window, text=f"{value}", bg="dark grey", fg="black", font=('impact', 13)
+              ).grid(row=index, column=1, padx=5, pady=5)
+        update_add = Button(window, text='+', bg="gray32", fg="white", font=('impact', 11),
+                            command=lambda name=key, old_count=files[key]: update_cart_count(name, '+'))
+        update_add.grid(row=index, column=3, padx=5, pady=5)
+        update_add.configure(height=1, width=8)
+
+        update_remove = Button(window, text='-', bg="gray32", fg="white", font=('impact', 11),
+                               command=lambda name=key, old_count=files[key]: update_cart_count(name, '-'))
+        update_remove.grid(row=index, column=2, padx=5, pady=5)
+        update_remove.configure(height=1, width=8)
+        index += 1
+
+    back_button = Button(window, text='Back', bg="gray32", fg="white", font=('impact', 11),
+                         command=lambda: shop_view())
+    back_button.configure(height=1, width=8)
+    back_button.grid(column=0, row=index, padx=5, pady=5)
+    with open('../Stored_Data/bought_items.txt', 'r') as file:
+        dictionary = json.loads(file.read())
+        if not dictionary[current_user] == {}:
+            buy = Button(window, text='Place Order', bg="gray32", fg="white", font=('impact', 11),
+                         command=lambda: ordered())
+            buy.configure(height=1, width=12)
+            buy.grid(column=1, row=index, padx=5, pady=5)
+        else:
+            Label(window, text='Wow, empty. Go buy something.', bg="dark grey", fg="black", font=('impact', 13)
+                  ).grid(row=index, column=1, padx=5, pady=5)
+
+
+def update_cart_count(name, add_or_remove):
+    with open('../Stored_Data/bought_items.txt', 'r') as file:
+        cart = json.loads(file.read())
+        for key, value in cart[current_user].items():
+            if key == name:
+                if add_or_remove == '+':
+                    cart[current_user][key] += 1
+                    break
+                else:
+                    cart[current_user][key] -= 1
+                    if cart[current_user][key] == 0:
+                        cart[current_user].pop(key)
+                    break
+    with open('../Stored_Data/bought_items.txt', 'w') as file:
+        json.dump(cart, file)
+    with open('inventory.py') as items:
+        temp = []
+        for contents in items.read().splitlines():
+            line = ast.literal_eval(contents)
+            if line["name"] == name:
+                if add_or_remove == '+':
+                    line['count'] -= 1
+                else:
+                    line['count'] += 1
+            temp.append(line)
+    with open('inventory.py', 'w'):
+        pass
+    with open('inventory.py', 'a') as newfile:
+        for line in temp:
+            newfile.write(str(line) + '\n')
+    view_cart()
+
+
+def ordered():
+    messagebox.showinfo(' ', 'Ordered successfully. Items will be on their way.')
+    with open('../Stored_Data/bought_items.txt', 'r') as file:
+        dictionary = json.loads(file.read())
+        dictionary[current_user] = {}
+    with open('../Stored_Data/bought_items.txt', 'w') as file:
+        json.dump(dictionary, file)
+    view_cart()
 
 
 if __name__ == '__main__':
